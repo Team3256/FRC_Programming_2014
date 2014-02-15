@@ -18,7 +18,7 @@ public class BallController {
     private Solenoid catcherArm;
     private Talon armRoller;
     private boolean photoReceived;
-    BallController(int photoPort, int limitPort, int catcherArm, int rollerMotor){
+    BallController(int rollerMotor, int photoPort, int limitPort, int catcherArm){
         photoResistor = new DigitalInput(photoPort);
         limitSwitch = new DigitalInput(limitPort);
         this.catcherArm = new Solenoid(catcherArm);

@@ -7,7 +7,7 @@
 
 package edu.wpi.first.wpilibj.templates;
 
-
+import edu.wpi.first.wpilibj.templates.*;
 import edu.wpi.first.wpilibj.SimpleRobot;
 
 /**
@@ -17,10 +17,31 @@ import edu.wpi.first.wpilibj.SimpleRobot;
  * creating this project, you must also update the manifest file in the resource
  * directory.
  */
-public class RobotTemplate extends SimpleRobot {
+public class MMXIVRobot extends SimpleRobot {
+    BallController ballControl;
+    Camera camera;
+    DriveTrain drivetrain;
+    Shooter shooter;
+    XboxController driver, operator;
     /**
      * This function is called once each time the robot enters autonomous mode.
      */
+    public MMXIVRobot() {
+        ballControl = new BallController(Constants.ROLLER_MOTOR_PORT,Constants.PHOTO_PORT,
+                                    Constants.LIMIT_PORT,Constants.CATCHER_PORT);
+        camera = new Camera();
+        drivetrain = new DriveTrain(Constants.LEFT_FRONT_MOTOR_PORT, Constants.LEFT_REAR_MOTOR_PORT,
+                                    Constants.RIGHT_FRONT_MOTOR_PORT, Constants.RIGHT_REAR_MOTOR_PORT,
+                                    Constants.LEFT_DRIVE_ENC_PORT1, Constants.LEFT_DRIVE_ENC_PORT2,
+                                    Constants.RIGHT_DRIVE_ENC_PORT1, Constants.RIGHT_DRIVE_ENC_PORT2,
+                                    Constants.SHIFTER_PORT1, Constants.SHIFTER_PORT2);
+        shooter = new Shooter(Constants.PUNCH_MOTOR_PORT, Constants.POT_PORT, Constants.REL_PORT1,
+                            Constants.REL_PORT2, Constants.LOWER_PORT1, Constants.LOWER_PORT2,
+                            Constants.UPPER_PORT1, Constants.UPPER_PORT2);
+        driver = new XboxController(1);
+        operator = new XboxController(2);
+    }
+    
     public void autonomous() {
         
     }
