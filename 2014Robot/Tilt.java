@@ -7,17 +7,18 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.Solenoid;
 
 /**
  *
  * @author VCS Robotics
  */
 public class Tilt {
-    private DoubleSolenoid lowerActuator;
+    private Solenoid lowerActuator;
     private DoubleSolenoid upperActuator;
     private String state;
-    public Tilt(int lower1, int lower2, int upper1, int upper2) {
-        lowerActuator = new DoubleSolenoid(lower1, lower2);
+    public Tilt(int lower1, int upper1, int upper2) {
+        lowerActuator = new Solenoid(lower1);
         upperActuator = new DoubleSolenoid(upper1, upper2);
         state = "kUp";
     }
@@ -29,14 +30,14 @@ public class Tilt {
     public void setState(String state) {
         this.state = state;
         if (state.equals("kUp")) {
-            lowerActuator.set(DoubleSolenoid.Value.kForward);
+            lowerActuator.set(false);
             upperActuator.set(DoubleSolenoid.Value.kForward);
         } else if (state.equals("kMiddle")) {
-            lowerActuator.set(DoubleSolenoid.Value.kForward);
+            lowerActuator.set(false);
             upperActuator.set(DoubleSolenoid.Value.kReverse);
         } else {
-            lowerActuator.set(DoubleSolenoid.Value.kReverse);
-            upperActuator.set(DoubleSolenoid.Value.kReverse);
+            lowerActuator.set(true);
+            upperActuator.set(DoubleSolenoid.Value.kOff);
         }
     }
     

@@ -15,9 +15,9 @@ public class Shooter {
     private Punch punch;
     private Tilt tilt;
     public Shooter(int talPort, int potPort, int relPort1, int relPort2,
-            int lower1, int lower2, int upper1, int upper2) {
+            int lower1, int upper1, int upper2) {
         punch = new Punch(talPort, potPort, relPort1, relPort2);
-        tilt = new Tilt(lower1, lower2, upper1, upper2);
+        tilt = new Tilt(lower1, upper1, upper2);
     }
     public void setPunchSetpoint(double setpoint) {
         punch.setSetpoint(setpoint);

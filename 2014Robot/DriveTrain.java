@@ -59,6 +59,7 @@ public class DriveTrain {
         encL.setDistancePerPulse(feet);
         encR.setDistancePerPulse(feet);
         shifter = new DoubleSolenoid(ds1, ds2);
+        shifter.set(DoubleSolenoid.Value.kReverse);
         encL.start();
         encR.start();
         pidL = new PIDController(0.25,0,0.17, new LeftSource(), new LeftOutput());
@@ -136,5 +137,12 @@ public class DriveTrain {
         encR.reset();
         pidL.setSetpoint(this.angle * angle);
         pidR.setSetpoint(-this.angle * angle);
+    }
+    public void setShifterState(boolean shift) {
+        if (shift) {
+            shifter.set(DoubleSolenoid.Value.kForward);
+        }
+        else
+            shifter.set(DoubleSolenoid.Value.kReverse);
     }
 }

@@ -33,7 +33,6 @@ public class Constants {
     public static final int REL_PORT1               =       4;
     public static final int REL_PORT2               =       5;
     public static final int LOWER_PORT1             =       6;
-    public static final int LOWER_PORT2             =       7;
     public static final int UPPER_PORT1             =       8;
     public static final int UPPER_PORT2             =       9;
     public static final int SHIFTER_PORT1           =       1;

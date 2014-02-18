@@ -36,7 +36,7 @@ public class MMXIVRobot extends SimpleRobot {
                                     Constants.RIGHT_DRIVE_ENC_PORT1, Constants.RIGHT_DRIVE_ENC_PORT2,
                                     Constants.SHIFTER_PORT1, Constants.SHIFTER_PORT2);
         shooter = new Shooter(Constants.PUNCH_MOTOR_PORT, Constants.POT_PORT, Constants.REL_PORT1,
-                            Constants.REL_PORT2, Constants.LOWER_PORT1, Constants.LOWER_PORT2,
+                            Constants.REL_PORT2, Constants.LOWER_PORT1, 
                             Constants.UPPER_PORT1, Constants.UPPER_PORT2);
         driver = new XboxController(1);
         operator = new XboxController(2);
@@ -50,7 +50,11 @@ public class MMXIVRobot extends SimpleRobot {
      * This function is called once each time the robot enters operator control.
      */
     public void operatorControl() {
-
+        while(isOperatorControl()) {
+            drivetrain.arcadeDrive(driver.getLeftY(), driver.getRightX());
+            drivetrain.setShifterState(driver.getButtonRB());
+            
+        }
     }
     
     /**
