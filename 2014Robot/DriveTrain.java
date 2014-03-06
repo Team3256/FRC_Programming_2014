@@ -8,6 +8,7 @@ package edu.wpi.first.wpilibj.templates;
 import edu.wpi.first.wpilibj.Talon;
 import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
+import edu.wpi.first.wpilibj.DriverStationLCD;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.PIDOutput;
 import edu.wpi.first.wpilibj.PIDSource;
@@ -22,11 +23,11 @@ public class DriveTrain {
     private DoubleSolenoid shifter;
     private PIDController pidL, pidR;
     private double feet = 64.0/ 1045.0 / 14.0;
-    private double angle = 1.97 / 90.0;
+    private double angle = 1.68 / 90.0;
     private class LeftOutput implements PIDOutput {
         public void pidWrite(double d) {
-            leftFront.set(d);
-            leftRear.set(d);
+            leftFront.set(-d);
+            leftRear.set(-d);
         }
     }
     private class RightOutput implements PIDOutput {
@@ -56,14 +57,17 @@ public class DriveTrain {
         rightRear = new Talon(rr);
         encL = new Encoder(el1, el2);
         encR = new Encoder(er1, er2, true);
+        System.out.println(feet);
         encL.setDistancePerPulse(feet);
         encR.setDistancePerPulse(feet);
         shifter = new DoubleSolenoid(ds1, ds2);
         shifter.set(DoubleSolenoid.Value.kReverse);
         encL.start();
         encR.start();
-        pidL = new PIDController(0.25,0,0.17, new LeftSource(), new LeftOutput());
-        pidR = new PIDController(0.25,0,0.17, new RightSource(), new RightOutput());
+        pidL = new PIDController(0.6,0.05,0.2, new LeftSource(), new LeftOutput());
+        pidR = new PIDController(0.6,0.05,0.2, new RightSource(), new RightOutput());
+        pidL.disable();
+        pidR.disable();
     }
     
     private void setLeftRight(double left, double right) {
@@ -73,8 +77,8 @@ public class DriveTrain {
             pidR.disable();
         left = (left > 1.0) ? 1.0 : (left < -1.0) ? -1.0 : left;
         right = (right > 1.0) ? 1.0 : (right < -1.0) ? -1.0 : right;
-        leftFront.set(left);
-        leftRear.set(left);
+        leftFront.set(-left);
+        leftRear.set(-left);
         rightFront.set(right);
         rightRear.set(right);
     }
@@ -119,30 +123,40 @@ public class DriveTrain {
         setLeftRight(left, right);
     }
     public void setFeetSetpoint(double setpoint) {
-        if (!pidL.isEnable())
-            pidL.enable();
-        if (!pidR.isEnable())
-            pidR.enable();
-        encL.reset();
-        encR.reset();
-        pidL.setSetpoint(setpoint);
-        pidR.setSetpoint(setpoint);
+        if (setpoint < encL.getDistance()-.05 && setpoint < encR.getDistance()-.05) {
+            arcadeDrive(-.6,.1);
+        } else if (setpoint > encR.getDistance()+.05 && setpoint > encL.getDistance()+.05) {
+            arcadeDrive(.6,-.1);
+        } else
+            arcadeDrive(0,0);
     }
     public void setAngleSetpoint(double angle) {
-        if (!pidL.isEnable())
-            pidL.enable();
-        if (!pidR.isEnable())
-            pidR.enable();
-        encL.reset();
-        encR.reset();
-        pidL.setSetpoint(this.angle * angle);
-        pidR.setSetpoint(-this.angle * angle);
+        if (angle * this.angle< encL.getDistance()-.05 && angle * this.angle< encR.getDistance()-.05) {
+            arcadeDrive(0, -0.8);
+        } else if (angle * this.angle> encL.getDistance()-.05 && angle * this.angle> encR.getDistance()-.05) {
+            arcadeDrive(0,.8);
+        } else
+            arcadeDrive(0,0);
     }
-    public void setShifterState(boolean shift) {
+    public void setShifterState(boolean shift) { 
         if (shift) {
             shifter.set(DoubleSolenoid.Value.kForward);
         }
         else
             shifter.set(DoubleSolenoid.Value.kReverse);
+    }
+    public void reset() {
+        encL.reset();
+        encR.reset();
+    }
+    public void log() {
+        DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser2,1,"" + encL.getDistance());
+        DriverStationLCD.getInstance().println(DriverStationLCD.Line.kUser3,1,"" + encR.getDistance());
+        DriverStationLCD.getInstance().updateLCD();
+        System.out.println("left encoder: "+ encL.getDistance());
+        System.out.println("right encoder: "+ encR.getDistance());
+    }
+    public double get() {
+        return leftFront.get() + leftRear.get() + rightFront.get() + rightRear.get();
     }
 }

@@ -14,13 +14,17 @@ import edu.wpi.first.wpilibj.templates.Tilt;
 public class Shooter {
     private Punch punch;
     private Tilt tilt;
-    public Shooter(int talPort, int potPort, int relPort1, int relPort2,
-            int lower1, int upper1, int upper2) {
-        punch = new Punch(talPort, potPort, relPort1, relPort2);
+    public Shooter(int talPort, int relPort1, int relPort2,
+          int lower1, int upper1, int upper2, int setPointPort) {
+        
+        punch = new Punch(talPort, relPort1, relPort2, setPointPort);
         tilt = new Tilt(lower1, upper1, upper2);
     }
-    public void setPunchSetpoint(double setpoint) {
-        punch.setSetpoint(setpoint);
+    public void loadShooter(double output) {
+       // if(!punch.ifLoaded())
+            punch.runLoader(output);
+        //else
+         //   punch.runLoader(-0.05);
     }
     public double getPunchSetpoint() {
         return punch.getSetpoint();
@@ -28,8 +32,13 @@ public class Shooter {
     public double getPunchPosition() {
         return punch.getPosition();
     }
-    public void releasePunch() {
-        punch.release();
+    
+    public boolean getPunchSwitch() {
+        return punch.ifLoaded();
+    }
+    
+    public void releasePunch(double delay) {
+        punch.release(delay);
     }
     public void setTiltState(String state) {
         tilt.setState(state);

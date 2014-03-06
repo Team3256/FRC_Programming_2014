@@ -7,6 +7,7 @@
 package edu.wpi.first.wpilibj.templates;
 
 import edu.wpi.first.wpilibj.AnalogChannel;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.PIDController;
 import edu.wpi.first.wpilibj.Talon;
@@ -18,33 +19,32 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class Punch {
     private Talon pullBack;
-    private AnalogChannel pot;
     private DoubleSolenoid release;
-    private PIDController pid;
+    private DigitalInput setPoint;
     
-    public Punch(int talPort, int potPort, int relPort1, int relPort2) {
+    public Punch(int talPort, int relPort1, int relPort2, int setPointPort) {
         pullBack = new Talon(talPort);
-        pot = new AnalogChannel(potPort);
         release = new DoubleSolenoid(relPort1, relPort2);
-        pid = new PIDController(0,0,0,pot, pullBack);
-        pid.enable();
+        setPoint = new DigitalInput(setPointPort);
     }
     
-    public void setSetpoint(double setpoint) {
-        pid.setSetpoint(setpoint);
+    public boolean ifLoaded(){
+        return setPoint.get();    
     }
-    
+    public void runLoader(double output){
+        pullBack.set(output);
+    }
     public double getSetpoint() {
-        return pid.getSetpoint();
+        return 0.0;
     }
     
     public double getPosition() {
-        return (double) pot.pidGet();
+        return 0.0;
     }
     
-    public void release() {
+    public void release(double delay) {
         release.set(DoubleSolenoid.Value.kForward);
-        Timer.delay(.075);
+        Timer.delay(delay);
         release.set(DoubleSolenoid.Value.kReverse);
     }
 }

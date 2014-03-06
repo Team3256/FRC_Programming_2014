@@ -21,7 +21,7 @@ public class Camera {
         ids = 0;
     }
     public boolean isHot() {
-        final NumberArray t= new NumberArray();
+        final NumberArray t = new NumberArray();
         server.retrieveValue("ids",t);
         return (ids == 2);
     }

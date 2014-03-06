@@ -20,7 +20,7 @@ public class Tilt {
     public Tilt(int lower1, int upper1, int upper2) {
         lowerActuator = new Solenoid(lower1);
         upperActuator = new DoubleSolenoid(upper1, upper2);
-        state = "kUp";
+        setState("kUp");
     }
     
     public String getState() {
@@ -33,11 +33,11 @@ public class Tilt {
             lowerActuator.set(false);
             upperActuator.set(DoubleSolenoid.Value.kForward);
         } else if (state.equals("kMiddle")) {
+            lowerActuator.set(true);
+            upperActuator.set(DoubleSolenoid.Value.kForward);
+        } else {
             lowerActuator.set(false);
             upperActuator.set(DoubleSolenoid.Value.kReverse);
-        } else {
-            lowerActuator.set(true);
-            upperActuator.set(DoubleSolenoid.Value.kOff);
         }
     }
     
