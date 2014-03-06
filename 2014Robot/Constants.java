@@ -8,7 +8,7 @@ package edu.wpi.first.wpilibj.templates;
 
 /**
  *
- * @author Tanay
+ * @author VCS Robotics
  */
 public class Constants {
     //motor ports
